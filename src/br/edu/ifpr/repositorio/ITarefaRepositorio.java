@@ -11,5 +11,8 @@ public interface ITarefaRepositorio {
 	public Tarefa buscarPorId(String id);
 	
 	public Tarefa cadastrar(Tarefa tarefa);
+	
+	public void alterarStatus(String id, String status) throws IllegalArgumentException;
 
+	public void excluir(String id);
 }
