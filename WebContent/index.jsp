@@ -27,6 +27,8 @@
 		
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
 		
+		String mensagemErro = (String) request.getAttribute("erros");
+		
 	%>
 
 
@@ -37,22 +39,25 @@
 		
 		<form action="/app/tarefas/cadastrar" method="post" class="form-inline mt-3 mb-3">
 		
-			<input class="form-control mb-2 mr-sm-2" type="text" name="inputNomeTarefa" />
-		
+			<input class="form-control mb-2 mr-sm-2 <% if(mensagemErro != null){ out.println("is-invalid");}  %>" type="text" name="inputNomeTarefa" />
 			<button type="submit" class="btn btn-primary mb-2">cadastrar</button>
-		
+			<small class="form-text text-mute"> <% if(mensagemErro != null){ out.println(mensagemErro); } %> </small>
+
 		</form>
 		
 	
 		<table class="table">
 			<thead>
 				<tr>
-				<th>#id</th>
-				<th>nome</th>
-				<th>data</th>
-				<th>status</th>
+					<th>#id</th>
+					<th>nome</th>
+					<th>data</th>
+					<th>status</th>
+					<th>operações</th>
 				</tr>
 			</thead>
+			
+			<!-- taglib -->
 			
 			<% for(Tarefa tarefa: listaTarefasJSP) { %>
 			<tr>
@@ -60,7 +65,16 @@
 				<td><%= tarefa.getNome() %></td>
 				<td><%= dateFormat.format(tarefa.getDataCriacao()) %> </td>
 				<td><%= tarefa.getStatus().getStatus() %></td>
+				
+				<td>
+					<a href="/app/tarefas/alterar-status?id=<%= tarefa.getId() %>&status=cancelar">cancelar</a>
+					<a href="/app/tarefas/alterar-status?id=<%= tarefa.getId() %>&status=concluir">concluir</a>
+					
+					<a href="/app/tarefas/excluir?id=<%= tarefa.getId() %>">excluir</a>
+					
+				</td>
 			</tr>
+			
 			<%} %>
 		
 			
