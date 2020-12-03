@@ -2,6 +2,7 @@ package br.edu.ifpr.servlets;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,11 +28,15 @@ public class CadastrarTarefaServlet extends HttpServlet {
 		Tarefa tarefa = new Tarefa();
 		tarefa.setNome(nomeTarefa);
 		
-		repositorio.cadastrar(tarefa);
+		try {
+			repositorio.cadastrar(tarefa);	
+			resp.sendRedirect("/app");
 		
-		resp.sendRedirect("/app");
-		
-		
+		} catch(IllegalArgumentException e) {
+						
+			req.setAttribute("erros", e.getMessage());
+			RequestDispatcher disp = req.getRequestDispatcher("/app");
+			disp.forward(req, resp);
+		}
 	}
-	
 }
